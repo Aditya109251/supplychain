@@ -41,12 +41,18 @@ function App() {
     try {
       const response = await fetch('/api/state');
       if (!response.ok) throw new Error('Terminal Connection Refused');
+      
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error('Invalid Protocol (Received HTML instead of JSON). This usually happens if the backend server is not running or if deployed to a static-only platform.');
+      }
+
       const data = await response.json();
       setState(data);
       setError(null);
     } catch (err: any) {
       console.error("Error fetching state:", err);
-      setError(err.message);
+      setError(err.message || 'Mesh Sync Error');
     }
   };
 
@@ -54,9 +60,10 @@ function App() {
     fetchData();
     const interval = setInterval(fetchData, 3000);
     
+    // Safety: Force loading off after 5 seconds regardless of sync
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 4500);
 
     return () => {
       clearInterval(interval);

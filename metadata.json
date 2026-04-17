@@ -1,0 +1,8 @@
+{
+  "name": "Supply AI",
+  "description": "Premium AI-driven logistics control and demand prediction system, optimized for real-time supply chain intelligence in Chandigarh.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
